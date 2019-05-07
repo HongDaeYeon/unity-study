@@ -1,0 +1,122 @@
+우선 유니티를 들어가게 되면 화면의 좌측의 오브젝트 탐색기와 하단의 에셋 탐색기, 우측의 오브젝트 속성창을 확인할 수 있다.
+먼저 오브젝트를 만들어야 하므로 좌측의 오브젝트 탐색기에 우클릭 후 "3d object"에서 원하는 모양의 3d 오브젝트들을 생성한다.
+생성된 오브젝트는 오브젝트 탐색기 바로 위에 있는 버튼으로 크기 변화 및 회전등의 모양 변화를 할 수 있고
+오브젝트 탐색기에 쓰여있는 오브젝트를 누른 후 우측의 오브젝트 속성창의 기능을 이용해 
+질량, 중력, 충돌 속성, 물리 효과등의 추가적인 기능을 설정할 수 있다. 
+오브젝트 속성창의 기능들을 더 살펴보자면 우선 리지드바디 부분이 있다.
+여기서 mass는 질량, 즉 무거운 정도를 의미하고, drag는 낙하저항, angular drag 는 회전저항, is kinematic은 외부 물리효과의 영향 여부, collision detection은 연속 충돌 감지 옵션이다. 
+이런 식으로 물체의 물리적 속성을 내맘대로 설정할 수 있게 된다. 여기서 하단의 기능을 살펴보면 
+하단의 에셋 탐색기에 우클릭을 한 뒤 create 부분에서 여러 형태의 파일을 생성할 수 있다.
+그 중 가장 기본적으로 외부에서 이미지를 저장한 후 에셋 파일을 만들어 거기에 옮긴 후 드래그해서 오브젝트에 가져가면 오브젝트를 내가 미리 저장해 놓은 이미지로 입힐 수가 있다.
+이미지를 입히는 기능 외에 c# 스크립트 기능이 있는데 c#을 이용해서 내가 우너하는 오브젝트를 게임 내에서 조종할 수 있도록 해줄 수 있는 파일을 만들 수가 있다. 
+이를 간단히 말해보자면 우선 awake, 즉 최초 한번 실행되는 단계를 거친 후 start로 실행 후 한번 단계를 거친다. 그 후에 내가 끝낼 때까지 매 프레임마다 update 및 각 update를 백업하는 lateupdate를 실행한다. 
+그 다음에 한 내용은 GIT이다. GIT으로 들어가서 
+git init
+git clone (깃레퍼지토리 주소)
+(수정 폴더로 들어가기)
+git add -A
+git commit -m "수정 내용"
+git push origin master
+를 순서대로 친다. 
+$ ls : 현 폴더의 문서나 폴더 보기
+$ cd : 폴더로 들어가기
+$ cd .. : 위 상위ㅣ 폴더로 가기
+등의 기능을 이용해서 폴더 이동을 할 수 있고
+깃허브에 올릴 때는
+$git add -A
+$git commit -m "수정 내용 요약"
+$git push origin master
+의 방법으로 올리고 서버에서 받을 때에는
+먼저 처음 받을 때엔
+$ git clone 깃레퍼지토리주소
+를 이용하고 이미 존재할 때에는
+$git pull origin master
+를 이용한다.
+마지막 시간에 배운 내용은 본격적으로 c# 스크립트를 만드는 방법이다.
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class "파일 이름" : MonoBehaviour
+{
+	public float movespeed = 5f;     // 이동속도 float
+	public Transform tr;
+    // Start is called before the first frame update
+    void Start()
+    {
+		tr = GetComponent<Transform>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if(Input.GetKey(KeyCode.LeftArrow))     // 왼쪽 키를 누르게 되면
+		{
+			tr.Translate(Vector3.left * movespeed * Time.deltaTime);
+		}
+    }
+}
+이 기본 형태인데 여기서 public float movespeed : 부분으로 이동 속도를 성정할 수 있고
+ if(Input.GetKey(KeyCode.LeftArrow)) 부분에서 leftarrow의 left를 
+back, down, forward, left, one, right, up, zero등으로 바꾸거나 추가하여 오브젝트의 위치 벡터를 설정해 줄 수 있다.
+또한 getkey, 즉 누르고 있을 때 연속 실행 말고도 getkeydown(누를 때 한번만), getkeyup(누른 키를 뗄 때 한번만)등으로도 설정할 수 있다.
+이처럼 c# 스크립트를 만들어서 오브젝트에 드래그하면 그 오브젝트가 게임 실행 내내 스크립트를 짠 대로 움직이게 되고 이는 한 오브젝트에만 해당되기에 다른 오브젝트도 동일하게 하고 싶다면 드래그해서 넣어준ㄴ 방벙을 통해 종속을 시키면 그 오브젝트가 종속되어 따라다니게 된다. 카메라도 이처럼 종속시킬 수가 있다.
+여타로 오브젝트가 물건으 줍고 놓게 하고 싶으면
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class q : MonoBehaviour
+{
+	public float movespeed = 5f;
+	public Transform tr;
+	bool got = false;       // 따로 선언
+	// Start is called before the first frame update
+	void Start()
+    {
+		tr = GetComponent<Transform>();
+	}
+
+	// Update is called once per frame
+	void Update()
+	{
+				if (Input.GetKeyDown(KeyCode.Space))
+		{
+			GameObject child = GameObject.Find("Sphere1");
+			if (!got) // 물건을 안 잡고 있다면
+			{
+				child.transform.parent = this.transform;
+				got = true;
+			}
+			else   // 잡고 있다면
+			{
+				child.transform.parent = null;
+				got = false;
+			}
+
+		}
+	}
+}
+을 이용해서 스페이스 바를 통해 물건을 잡고 놓을 수 있도록 할 수 있다.
+충돌 부분은 먼저 
+1.rigidbody 추가
+2.void oncollisionenter 함수 추가
+3.충돌시 충돌감지 로그 출현
+여기서 rigidbody의 kinematic 속성을 먼저 끄고
+1. void OnCollisionEnter(Collider col)
+충돌이 시작되는 순간 호출
+2. void OnCollisionStay(Collider col)
+충돌이 진행중일 때
+3. void OnCollisionExit(Collider col)
+충돌이 끝날 때
+를 수행한다.
+trigger를 통해
+gameobject간의 물리적 연산X 충돌을 감지할 수 있게 되고 두 gameobject가 서로 접촉했을 때 튕겨나가지 않고 그냥 통과하게 된다.
+이를 하기 위해서는 collider 항목에 is trigger를 체크해야 한다.
+1. void OnTriggerEnterr(Collider col)
+충돌이 시작되는 순간 호출
+2. void OnTriggerStay(Collider col)
+충돌이 진행 중일 때
+3. void OnTriggerExit(Collider col)
+충돌이 끝날 때
+를 수행하면 된다.
